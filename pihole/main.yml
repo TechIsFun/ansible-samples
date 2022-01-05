@@ -2,7 +2,7 @@
 - hosts: all
 
   vars:
-    pihole_repo: ~/repositories/pihole
+    pihole_repo: "{{ ansible_env.HOME }}/repositories/pihole"
 
   tasks:
     - name: Checkout PiHole repo
@@ -17,7 +17,7 @@
       shell: 'ls -l {{ pihole_repo }}'
 
     - name: Execute install script
-      shell: 'basic-install.sh'
+      shell: './basic-install.sh'
       args:
-        chdir: '{{ pihole_repo }}/automated install'
+        chdir: "{{ pihole_repo }}/automated install"
       become: true
