@@ -7,9 +7,11 @@ on:
       - '*'
     paths:
       - 'pihole/**'
+      - '.github/workflows/pihole.yml'
   pull_request:
     paths:
       - 'pihole/**'
+      - '.github/workflows/pihole.yml'
   schedule:
     - cron: "0 5 * * 4"
 
