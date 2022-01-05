@@ -13,5 +13,5 @@
     - name: Execute install script
       shell: 'basic-install.sh'
       args:
-        chdir: ~/repositories/pihole
+        chdir: '~/repositories/pihole/automated install'
       become: true
