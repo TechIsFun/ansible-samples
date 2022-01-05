@@ -1,0 +1,56 @@
+---
+name: Test PiHole Script
+
+on:
+  push:
+    branches:
+      - '*'
+    paths-ignore:
+      - '**.md'
+    paths:
+      - 'pihole/**'
+  pull_request:
+    paths-ignore:
+      - '**.md'
+    paths:
+      - 'pihole/**'
+  schedule:
+    - cron: "0 5 * * 4"
+
+jobs:
+
+  test:
+    name: Test PiHole Script
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the codebase.
+        uses: actions/checkout@v2
+
+      - name: Upgrade pip.
+        run: pip3 install --upgrade pip
+
+      - name: Install test dependencies.
+        run: sudo pip3 install ansible
+
+      - name: Set up the test environment.
+        run: |
+          ansible-galaxy install -r requirements.yml
+
+      - name: Test the playbook's syntax.
+        run: ansible-playbook main.yml --syntax-check
+
+      - name: Test the playbook.
+        run: ansible-playbook -v main.yml
+        working-directory: pihole
+        env:
+          ANSIBLE_FORCE_COLOR: '1'
+
+      - name: Idempotence check.
+        run: |
+          idempotence=$(mktemp)
+          ansible-playbook main.yml | tee -a ${idempotence}
+          tail ${idempotence} | grep -q 'changed=0.*failed=0' && (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)
+        working-directory: pihole
+        env:
+          ANSIBLE_FORCE_COLOR: '1'
