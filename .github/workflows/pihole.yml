@@ -20,7 +20,9 @@ jobs:
   test:
     name: Test PiHole Script
     runs-on: ubuntu-latest
-
+    env:
+      PROJECT_DIR: pihole
+    
     steps:
       - name: Check out the codebase.
         uses: actions/checkout@v2
@@ -34,13 +36,14 @@ jobs:
       - name: Set up the test environment.
         run: |
           ansible-galaxy install -r requirements.yml
+        working-directory: ${{ env.PROJECT_DIR }}
 
       - name: Test the playbook's syntax.
         run: ansible-playbook main.yml --syntax-check
 
       - name: Test the playbook.
         run: ansible-playbook -v main.yml
-        working-directory: pihole
+        working-directory: ${{ env.PROJECT_DIR }}
         env:
           ANSIBLE_FORCE_COLOR: '1'
 
@@ -49,6 +52,6 @@ jobs:
           idempotence=$(mktemp)
           ansible-playbook main.yml | tee -a ${idempotence}
           tail ${idempotence} | grep -q 'changed=0.*failed=0' && (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)
-        working-directory: pihole
+        working-directory: ${{ env.PROJECT_DIR }}
         env:
           ANSIBLE_FORCE_COLOR: '1'
