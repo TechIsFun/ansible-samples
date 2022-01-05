@@ -40,6 +40,7 @@ jobs:
 
       - name: Test the playbook's syntax.
         run: ansible-playbook main.yml --syntax-check
+        working-directory: ${{ env.PROJECT_DIR }}
 
       - name: Test the playbook.
         run: ansible-playbook -v main.yml
