@@ -8,7 +8,7 @@
     - name: Checkout PiHole repo
       git:
         repo: 'https://github.com/pi-hole/pi-hole.git'
-        dest: {{ pihole_repo }}
+        dest: '{{ pihole_repo }}'
         single_branch: true
         version: master
         depth: 1
