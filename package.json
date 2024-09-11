@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/TechIsFun/ansible-mac-dev-playbook#readme",
   "devDependencies": {
-    "husky": "8.0.1"
+    "husky": "9.1.6"
   },
   "dependencies": {
     "@commitlint/cli": "^17.0.0",
